@@ -14,7 +14,7 @@ const Chat: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl = 'http://localhost:8080/llama'; // Asegúrate de que esta URL sea correcta
+  const apiUrl = 'http://localhost:8080/llama'; 
 
   const handleSend = async () => {
     if (input.trim() === '') return;
@@ -28,10 +28,9 @@ const Chat: React.FC = () => {
         headers: {
           'Content-Type': 'text/plain',
         },
-        timeout: 60000, // 60 segundos
+        timeout: 60000,
       });
 
-      // Asume que la respuesta es una cadena de texto
       const reply = response.data as string;
 
       const newMessage: Message = {

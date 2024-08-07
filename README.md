@@ -8,15 +8,18 @@
 - [ ] Download verification (Avoid repeating files)
 
 ### LLM
-- [ ] Fix non-response error
+- [x] Fix non-response error
 - [ ] Fine-Tuning
-- [ ] Fast API 
+- [x] Fast API 
 
 ### Client
-- [ ] Prepare the framework
-- [ ] Create the UX
-- [ ] Chat
-- [ ] Http Request to Server
+- [x] Prepare the framework
+- [x] Create the UX
+- [x] Chat
+- [x] Http Request to Server
 
 ### Server
-> Not done
+- [x] Create request to Llama 
+- [x] Create endpoint /llama POST (body will be asked to Llama)
+- [x] Create Dockerfile 
+- [ ] Create Docker Network

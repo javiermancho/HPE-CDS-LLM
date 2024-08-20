@@ -9,7 +9,7 @@
 
 ### LLM
 - [x] Fix non-response error
-- [ ] Fine-Tuning
+- [ ] Promt management with chunks
 - [x] Fast API 
 
 ### Client
@@ -23,3 +23,11 @@
 - [x] Create endpoint /llama POST (body will be asked to Llama)
 - [x] Create Dockerfile 
 - [ ] Create Docker Network
+
+## Database
+- [x] Chunks storage
+- [x] Text splitter
+
+## Embeddings
+- [x] Embeddings endpoint
+- [x] Model selection

@@ -1,16 +1,12 @@
 package com.HPEBack.HPEBack;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -18,11 +14,20 @@ import com.google.gson.JsonObject;
 public class AIController{
 
     @PostMapping("/llama")
-    public static String getData(@RequestBody String message) throws IOException, InterruptedException{
-        System.out.println(message);
+    public static String getData(@RequestBody RequestData data) throws IOException, InterruptedException{
+        String message = data.getMessage();
+        String dateInit = data.getDateStart();
+        String dateEnd = data.getDateEnd();
 
-        String response = Requests.postllama(Utils.promptBuilder(message));
-        return Utils.extractText(response);
+        String response = Requests.postEmbeddings(Utils.queryBuilder(message, Utils.convertDate(dateInit), Utils.convertDate(dateEnd)));
+        
+        System.out.println(response);
+
+        ArrayList<String> chunks = Utils.extractTextFromEmbeddings(response);
+        
+        String responseFromModel = Requests.postllama(Utils.promptBuilder(message, chunks));
+
+        return Utils.extractTextFromModel(responseFromModel);
     }
 
 }

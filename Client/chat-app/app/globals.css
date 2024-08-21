@@ -1,13 +1,56 @@
 /* styles/globals.css */
+
+.title{
+  color: #fff;
+  text-align: center;
+  margin-top: 2vh;
+}
+
+
 .chat-container {
-  width: 400px;
+  width: 90vw;
+  height: 75vh;
   margin: 0 auto;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  background-color: #666666;
 }
+
+.error{
+  color: rgb(99, 38, 38);
+  margin-top: 2vh;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  background-color: rgb(240, 139, 139);
+  width: 90vw;
+  height: 4vh;
+  border-radius: 10px;
+  transition: opacity 2s ease-in-out;
+  opacity: 1;
+}
+
+.error-message {
+  opacity: 0.8;
+  transition: opacity 1.5s ease; /* Ajusta el tiempo de transición y la función de temporización */
+  color: red;
+  padding: 10px;
+  border: 1px solid red;
+  background-color: #ffe6e6;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.error-message.hidden {
+  opacity: 0;
+  transition: opacity 3s ease-out; /* El desvanecimiento es más largo y suave */
+}
+
+
 
 .messages {
   flex: 1;
@@ -22,17 +65,19 @@
 }
 
 .message.user {
-  background-color: #e0f7fa;
+  background-color: #999999;
   align-self: flex-end;
 }
 
 .message.api {
-  background-color: #ffe0b2;
+  background-color: #78b177;
   align-self: flex-start;
 }
 
 .input-container {
   display: flex;
+  margin-top: 10px;
+  border-radius: 20px;
 }
 
 .input-container input {
@@ -50,4 +95,48 @@
   background-color: #009688;
   color: #fff;
   cursor: pointer;
+}
+
+body{
+  background-color: #333333;
+}
+.date-input-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 2vh;
+  justify-content: end;
+}
+
+.date-input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.date-label {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #eeecec;
+}
+
+.date-input {
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/*----------------------------- Fetch Button--------------------------------- */
+.fetchButtonParent{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+.fetchButton{
+  background-color: #009688;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 2vh;
 }

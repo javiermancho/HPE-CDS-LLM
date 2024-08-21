@@ -15,8 +15,7 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Obtain actual date
 global ACTUAL_DATE 
-ACTUAL_DATE = datetime.now()  # Keep ACTUAL_DATE as a datetime object
-
+ACTUAL_DATE = datetime.now()
 global LAST_DATE
 # Obtain last date from config.json
 with open('config.json') as json_file:

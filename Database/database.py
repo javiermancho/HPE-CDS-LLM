@@ -58,7 +58,7 @@ def store():
     chunks_obj = list()
     i = 0
     for chunk in chunks:
-        embeddings = requests.post("http://127.0.0.1:5001/mistral", json={"content": chunk}, timeout=30)
+        embeddings = requests.post("http://embeddings:5001/embeddings", json={"content": chunk}, timeout=30)
         embeddings = embeddings.json()["embeddings"]
         #print(embeddings)
         temp = Chunk(
@@ -120,7 +120,7 @@ def query():
         return jsonify({"error": "Query parameter is required"}), 400
     try:
         # Obtain embeddings for the query
-        query = requests.post("http://127.0.0.1:5001/mistral", json={"content": query}, timeout=30)
+        query = requests.post("http://embeddings:5001/embeddings", json={"content": query}, timeout=30)
         query = query.json()["embeddings"]
         dateInit = request.json["dateInit"]
         dateEnd = request.json["dateEnd"]

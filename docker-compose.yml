@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  nextjs:
+    build:
+      context: ./Client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+    - my-network
+
+  chromadb:
+    build:
+      context: ./Database
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./Database/files:/app/files
+    networks:
+    - my-network
+
+  boe-script:
+    build:
+      context: ./BOE-Script
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./BOE-Script/pdfs:/app/pdfs
+    networks:
+    - my-network
+  
+  embeddings:
+    build:
+      context: ./Embeddings
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+    - my-network
+
+  server:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+    - my-network
+  
+  llm:
+    build:
+      context: ./LLM
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003"
+    networks:
+    - my-network
+
+volumes:
+  chromadb_files:
+    driver: local
+  boe_script_pdfs:
+    driver: local
+
+networks:
+  my-network:
+    driver: bridge

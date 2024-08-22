@@ -13,7 +13,7 @@ public class Requests {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:5003/llama"))
+                .uri(URI.create("http://llm:5003/llama"))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .header("content-type", "application/json")
                 .build();
@@ -28,7 +28,7 @@ public class Requests {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:5000/query"))
+                .uri(URI.create("http://chromadb:5000/query"))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .header("content-type", "application/json")
                 .build();

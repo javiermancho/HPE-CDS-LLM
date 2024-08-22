@@ -118,7 +118,7 @@ const Chat: React.FC = () => {
         {/* Utiliza el componente ErrorMessage para mostrar el error */}
         {error && <ErrorMessage error={error} />}
       </div>
-      <FetchButton url="http://localhost:5002/update-pdf" />
+      <FetchButton url="http://127.0.0.1:5002/update-pdf" />
     </div>
   );
 };

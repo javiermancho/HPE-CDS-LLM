@@ -6,7 +6,7 @@ app = Flask("Embeddings server")
 
 gpt4all_embd = GPT4AllEmbeddings()
 
-@app.route("/mistral", methods=['POST'])
+@app.route("/embeddings", methods=['POST'])
 def get_embedding():
     text = request.json["content"]
     if not text:

@@ -127,27 +127,25 @@ def query():
         # Obtain the closest document to the query from the database
         dateInit = int(dateInit)
         dateEnd = int(dateEnd)
-        print(dateInit)
-        print(dateEnd)
         query_result = CDB.query(
             query_embeddings=query, 
             n_results=3,
-            # where={
-            #     "date": {"$eq":"20240819"}}
             where={
                 "$and": [
-                    {"date": {"$gte": dateInit}},  # Accede a la fecha dentro del objeto
-                    {"date": {"$lte": dateEnd}}     # Accede a la fecha dentro del objeto
+                    {"date": {"$gte": dateInit}},
+                    {"date": {"$lte": dateEnd}}
                 ]
             }
          )
+        if (not query_result.get("ids") or all(len(id_list) == 0 for id_list in query_result.get("ids"))):
+            return jsonify({"status": "not found"}), 404
+        
         # Response format
         response = {
             "status": "ok",
             "ids" : query_result.get("ids"),
             "content": query_result.get("documents"),
             "date": query_result.get("metadatas")
-
         }
         return jsonify(response), 200
     # Handle exceptions

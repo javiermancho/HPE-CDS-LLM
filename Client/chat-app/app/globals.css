@@ -138,5 +138,10 @@ body{
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 2vh;
+  margin-top: 10px;
+}
+
+.last-pdf-date{
+  text-align: center;
+  color: #fff;
 }

@@ -21,7 +21,7 @@ def generate_response():
             print("Max tokens: ", max_tokens)
 
             # Prompt creation
-            prompt = f"""<s>[INST] <<SYS>>
+            prompt = f"""[INST] <<SYS>>
             {system_message}
             <</SYS>>
             {user_message} [/INST]"""
@@ -33,11 +33,8 @@ def generate_response():
              
             # Run the model
             output = model(prompt, max_tokens=max_tokens,  echo=False)
-            
-            return jsonify(output)
-
-        else:
-            return jsonify({"error": "Missing required parameters"}), 400
+            response_text = output['choices'][0]['text']
+            return jsonify({"response": response_text})
 
     except Exception as e:
         return jsonify({"Error": str(e)}), 500

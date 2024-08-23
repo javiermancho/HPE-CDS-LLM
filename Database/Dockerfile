@@ -1,16 +1,25 @@
-# Usa una imagen base oficial de PostgreSQL
-FROM postgres:latest
+# Usa una imagen base oficial de Python
+FROM python:3.9-slim
 
-# Instala las dependencias necesarias para construir pgvector
-RUN apt-get update && \
-    apt-get install -y \
-    git \
-    build-essential \
-    postgresql-server-dev-all && \
-    rm -rf /var/lib/apt/lists/*
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Clona el repositorio pgvector, construye e instala la extensión
-RUN git clone https://github.com/pgvector/pgvector.git && \
-    cd pgvector && \
-    make && \
-    make install
+# Copia el archivo de requerimientos en el contenedor
+COPY requirements.txt .
+
+RUN apt-get update && apt-get install -y build-essential
+
+# Instala las dependencias necesarias
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade --quiet  spacy
+# Instala el modelo de spaCy
+RUN python -m spacy download en_core_web_sm
+
+# Copia el código fuente de la aplicación al directorio de trabajo
+COPY . .
+
+# Expone el puerto en el que la aplicación Flask estará disponible
+EXPOSE 5000
+
+# Comando para ejecutar la aplicación Flask
+CMD ["python", "database.py"]

@@ -15,11 +15,10 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Obtain actual date
 global ACTUAL_DATE 
-ACTUAL_DATE = datetime.now()  # Keep ACTUAL_DATE as a datetime object
-
+ACTUAL_DATE = datetime.now()
 global LAST_DATE
 # Obtain last date from config.json
-with open('config.json') as json_file:
+with open('./pdfs/config.json') as json_file:
     data = json.load(json_file)
     LAST_DATE = data['last_pdf_date']
     LAST_DATE = datetime.strptime(LAST_DATE, "%Y%m%d")
@@ -45,7 +44,7 @@ def download_pdf(pdf_url, date_str, unique_id):
             "id": unique_id,
             "content": texto_pdf
         }
-        response = requests.post("http://localhost:5000/store", json=body)
+        response = requests.post("http://chromadb:5000/store", json=body)
 
         print(f"PDF guardado: {pdf_filename}")
     else:
@@ -98,7 +97,7 @@ def update_pdf():
         fetch_and_save_pdfs(LAST_DATE.strftime("%Y%m%d"))
         LAST_DATE += timedelta(days=1)
     
-    with open('config.json', 'w') as json_file:
+    with open('/pdfs/config.json', 'w') as json_file:
         data = {
             "last_pdf_date": LAST_DATE.strftime("%Y%m%d")  # Save as string in the correct format
         }

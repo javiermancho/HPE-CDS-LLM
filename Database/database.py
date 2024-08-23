@@ -10,7 +10,7 @@ from langchain_text_splitters import SpacyTextSplitter
 app = Flask("ChromaDB")
 
 # Text splitter initialization
-text_splitter = SpacyTextSplitter(chunk_size=250)
+text_splitter = SpacyTextSplitter(chunk_size=1024)
 
 # Client initialization for the database in path "files"
 client = chromadb.PersistentClient(path="files")
@@ -58,9 +58,9 @@ def store():
     chunks_obj = list()
     i = 0
     for chunk in chunks:
-        embeddings = requests.post("http://127.0.0.1:5001/mistral", json={"content": chunk}, timeout=30)
+        embeddings = requests.post("http://embeddings:5001/embeddings", json={"content": chunk}, timeout=30)
         embeddings = embeddings.json()["embeddings"]
-        print(embeddings)
+        #print(embeddings)
         temp = Chunk(
             f"{id}-{i}", 
             date, 
@@ -77,7 +77,7 @@ def store():
             embeddings=chunk.getEmbedding(),
             documents = chunk.getContent(),
             metadatas=[
-                {"date": chunk.getDate()}]
+                {"date": int(chunk.getDate())}]
         )
 
 
@@ -120,12 +120,27 @@ def query():
         return jsonify({"error": "Query parameter is required"}), 400
     try:
         # Obtain embeddings for the query
-        query = requests.post("http://127.0.0.1:5001/mistral", json={"content": query}, timeout=30)
+        query = requests.post("http://embeddings:5001/embeddings", json={"content": query}, timeout=30)
         query = query.json()["embeddings"]
-
+        dateInit = request.json["dateInit"]
+        dateEnd = request.json["dateEnd"]
         # Obtain the closest document to the query from the database
-        query_result = CDB.query(query_embeddings=query, n_results=3)
-        
+        dateInit = int(dateInit)
+        dateEnd = int(dateEnd)
+        print(dateInit)
+        print(dateEnd)
+        query_result = CDB.query(
+            query_embeddings=query, 
+            n_results=3,
+            # where={
+            #     "date": {"$eq":"20240819"}}
+            where={
+                "$and": [
+                    {"date": {"$gte": dateInit}},  # Accede a la fecha dentro del objeto
+                    {"date": {"$lte": dateEnd}}     # Accede a la fecha dentro del objeto
+                ]
+            }
+         )
         # Response format
         response = {
             "status": "ok",

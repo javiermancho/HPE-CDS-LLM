@@ -9,8 +9,8 @@ def start_ia():
     print("Iniciando IA ...")
     stop_ia()
     subprocess.run([
-        "docker", "run", "-d", "--name", "sclgpt", "-ti", "-p", "5000:5000",
-        "-v", f"{os.getcwd()}/llama-2-7b-chat.Q2_K.gguf:/app/llama-2-7b-chat.Q2_K.gguf", "llama2"
+        "docker", "run", "-d", "--name", "sclgpt", "-ti", "-p", "5003:5003",
+        "-v", f"{os.getcwd()}/llama-2-7b-chat.Q4_K_M.gguf:/app/lllama-2-7b-chat.Q4_K_M.gguf", "llama2"
     ])
 
 def stop_ia():

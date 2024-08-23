@@ -13,7 +13,7 @@ public class Requests {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:5000/llama"))
+                .uri(URI.create("http://llm:5003/llama"))
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .header("content-type", "application/json")
                 .build();
@@ -21,5 +21,33 @@ public class Requests {
         
         return response;
     }
+
+    //Http request POST to 127:0.0.1:5000/embeddings
+    public static String postEmbeddings(String body) throws IOException, InterruptedException{
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://chromadb:5000/query"))
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .header("content-type", "application/json")
+                .build();
+        String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+
+
+        return response;
+    }
+
+
+    // Cliente manda el mensaje al servidor {text}
+    // Servidor manda el mensaje a la bbdd /query y devuelve los chunks
+    /*
+     * {
+     *  "text": "Pregunta"
+     *  "Contexto": "Contexto"
+     * }
+     */
+    // Servidor manda el mensaje mas los chunks al modelo
+
 }
 

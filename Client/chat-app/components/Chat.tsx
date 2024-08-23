@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ErrorMessage from './ErrorMessage'; // Importa el componente ErrorMessage
 import FetchButton from './FetchButton';
@@ -17,8 +17,27 @@ const Chat: React.FC = () => {
   const [dateEnd, setDateEnd] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastPdfDate, setLastPdfDate] = useState<string>(''); // Estado para la fecha del último PDF
 
   const apiUrl = 'http://localhost:8080/llama';
+  const dateApiUrl = 'http://localhost:5002/last-date'; // URL del endpoint para la fecha del último PDF
+
+  // Función para obtener la última fecha del PDF
+  const fetchLastPdfDate = async () => {
+    try {
+      const response = await axios.get(dateApiUrl);
+      const lastDateUpdate = response.data.last_date;
+      // Formatear la fecha en formato 'YYYY-MM-DD'
+      const formattedDate = `${lastDateUpdate.toString().slice(0, 4)}-${lastDateUpdate.toString().slice(4, 6)}-${lastDateUpdate.toString().slice(6)}`;
+      setLastPdfDate(formattedDate);
+    } catch (error) {
+      console.error('Error al obtener la fecha del último PDF:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLastPdfDate(); // Llamar a la función cuando el componente se monte
+  }, []);
 
   const handleSend = async () => {
     if (input.trim() === '') return;
@@ -74,6 +93,7 @@ const Chat: React.FC = () => {
 
   return (
     <div>
+
       <div className="chat-container">
         <div className="messages">
           {messages.map((msg, index) => (
@@ -118,6 +138,9 @@ const Chat: React.FC = () => {
         {/* Utiliza el componente ErrorMessage para mostrar el error */}
         {error && <ErrorMessage error={error} />}
       </div>
+      <div className="last-pdf-date">
+          <p>Último PDF subido: {lastPdfDate}</p>
+        </div>
       <FetchButton url="http://127.0.0.1:5002/update-pdf" />
     </div>
   );

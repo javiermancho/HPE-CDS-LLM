@@ -17,9 +17,15 @@ public class Requests {
                 .POST(HttpRequest.BodyPublishers.ofString(body))
                 .header("content-type", "application/json")
                 .build();
-        String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         
-        return response;
+        // Si devuelve 404, devolver un mensaje de error
+        if(response.statusCode() == 404){
+            return "Error: 404";
+        }
+        else{
+            return response.body();
+        }
     }
 
     //Http request POST to 127:0.0.1:5000/embeddings

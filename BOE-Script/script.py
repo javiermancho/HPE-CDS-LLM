@@ -5,8 +5,14 @@ from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 import pdfplumber
 
+from flask_cors import CORS
+
+
+# Configura CORS para permitir solicitudes desde localhost:3000
+
 # Create flask app
 app = Flask("BOE-Script")
+CORS(app) 
 
 
 # Configure path to save PDFs
@@ -84,8 +90,11 @@ def fetch_and_save_pdfs(date_str):
 
 @app.route("/last-date", methods=["GET"])
 def get_last_date():
-    return {"last_date": LAST_DATE.strftime("%Y%m%d")}  # Convert to string for response
-
+    lastDateResponse = LAST_DATE - timedelta(days=1)
+    response = jsonify({"last_date": lastDateResponse.strftime("%Y%m%d")})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    return response
 
 # /update-pdf endpoint to update PDFs
 @app.route("/update-pdf", methods=["GET"])
@@ -97,13 +106,16 @@ def update_pdf():
         fetch_and_save_pdfs(LAST_DATE.strftime("%Y%m%d"))
         LAST_DATE += timedelta(days=1)
     
-    with open('/pdfs/config.json', 'w') as json_file:
+    with open('./pdfs/config.json', 'w') as json_file:
         data = {
             "last_pdf_date": LAST_DATE.strftime("%Y%m%d")  # Save as string in the correct format
         }
         json.dump(data, json_file)
+    response = jsonify({"message": "Download Complete"})
 
-    return {"message": "Download Complete"}
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    return response
 
 
 # Main function

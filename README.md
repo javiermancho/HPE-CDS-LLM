@@ -1,46 +1,46 @@
-# Proyecto de Consulta Automatizada del BOE
+# Automated BOE Query Project
 
-Este proyecto implementa una arquitectura de microservicios para consultar el Boletín Oficial del Estado (BOE) utilizando procesamiento de lenguaje natural. Los servicios están diseñados para interactuar entre sí, proporcionando una solución escalable y eficiente para la búsqueda y consulta de documentos oficiales.
+This project implements a microservices architecture to query the Spanish Official State Gazette (BOE) using natural language processing. The services are designed to interact with each other, providing a scalable and efficient solution for searching and querying official documents.
 
-![imagen del chat](chat.png)
+![chat image](chat.png)
 
-## Índice 
-1. [Arquitectura](#arquitectura)
+## Index 
+1. [Architecture](#architecture)
    - [1. BOE-Script](#1-boe-script)
    - [2. Database](#2-database)
    - [3. Embeddings](#3-embeddings)
    - [4. LLM (Large Language Model)](#4-llm-large-language-model)
-   - [5. Servidor](#5-servidor)
-   - [6. Cliente](#6-cliente)
-2. [Instalación y Configuración](#instalación-y-configuración)
-   - [Prerrequisitos](#prerrequisitos)
-   - [Instalación](#instalación)
-   - [Configuración](#configuración)
-3. [Uso](#uso)
+   - [5. Server](#5-server)
+   - [6. Client](#6-client)
+2. [Installation and Configuration](#installation-and-configuration)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+   - [Configuration](#configuration)
+3. [Usage](#usage)
 
-## Arquitectura
+## Architecture
 
-La arquitectura del proyecto se compone de los siguientes microservicios:
+The project architecture consists of the following microservices:
 
 ### 1. BOE-Script
-- **Descripción**: Este servicio es responsable de descargar los archivos PDF del BOE hasta la fecha actual y almacenarlos en una base de datos. Además, guarda los archivos PDF en un directorio local llamado `/pdf`.
-- **Tecnología**: Python
-- **Funcionalidad**:
-  - Descarga los BOEs más recientes.
-  - Almacena los PDFs en una base de datos y en el directorio `/pdf`.
+- **Description**: This service is responsible for downloading BOE PDF files up to the current date and storing them in a database. It also saves the PDF files in a local directory called `/pdf`.
+- **Technology**: Python
+- **Functionality**:
+  - Downloads the most recent BOEs.
+  - Stores the PDFs in a database and the `/pdf` directory.
 - **Endpoints**:
-    - GET /update-pdf: comprueba si los pdfs están actualizados. Si no es así, descarga hasta la fecha actual.
-    - GET /last-date: Devuelve la fecha del último día descargado.
+    - GET /update-pdf: Checks if the PDFs are up to date. If not, it downloads them up to the current date.
+    - GET /last-date: Returns the date of the last downloaded day.
 
 ### 2. Database
-- **Descripción**: Este servicio gestiona el almacenamiento y recuperación de los documentos BOE en formato chunk (fragmentos de texto). Recibe los archivos PDF, los divide en chunks, y genera embeddings para su almacenamiento. También permite la consulta de los chunks más relevantes en función de una query y un rango de fechas.
-- **Tecnologías**: Python, ChromaDB, LangChain
-- **Funcionalidad**:
-  - Divide los PDFs en chunks manejables.
-  - Genera embeddings para cada chunk y los almacena junto al ID, contenido y fecha.
-  - Permite consultas para devolver los 3 chunks más relevantes según la query y el rango de fechas proporcionado.
+- **Description**: This service manages the storage and retrieval of BOE documents in chunk format (text fragments). It receives the PDF files, divides them into chunks, and generates embeddings for storage. It also allows querying the most relevant chunks based on a query and a date range.
+- **Technologies**: Python, ChromaDB, LangChain
+- **Functionality**:
+  - Divides PDFs into manageable chunks.
+  - Generates embeddings for each chunk and stores them along with the ID, content, and date.
+  - Allows queries to return the 3 most relevant chunks based on the provided query and date range.
 - **Endpoints**:
-    - POST /store: Se encarga de recibir el pdf. Recibe los siguientes parámetros en su cuerpo:
+    - POST /store: Handles receiving the PDF. It receives the following parameters in its body:
         ```JSON
         {
             "date": "01-01-2024",
@@ -48,7 +48,7 @@ La arquitectura del proyecto se compone de los siguientes microservicios:
             "content": "PDF Content"
         }
         ```
-    - POST /query: Recibe la pregunta del usuario y las fechas para hacer la consulta. Recibe los siguientes parámetros en su cuerpo:
+    - POST /query: Receives the user's question and the dates for querying. It receives the following parameters in its body:
         ```JSON
         {
             "query": "User question",
@@ -58,27 +58,28 @@ La arquitectura del proyecto se compone de los siguientes microservicios:
         ```
 
 ### 3. Embeddings
-- **Descripción**: Servicio encargado de recibir los chunks de texto y devolver sus embeddings correspondientes. Los embeddings son vectores numéricos que representan el contenido semántico del texto.
-- **Tecnología**: Python, GPT4All
-- **Funcionalidad**:
-  - Recibe chunks de texto.
-  - Genera embeddings correspondientes a cada chunk.
+- **Description**: Service responsible for receiving text chunks and returning their corresponding embeddings. Embeddings are numerical vectors that represent the semantic content of the text.
+- **Technology**: Python, GPT4All
+- **Functionality**:
+  - Receives text chunks.
+  - Generates embeddings corresponding to each chunk.
 
 - **Endpoints**: 
-    - POST /embeddings: Recibe una cadena de texto para convertirlo en Embeddings. 
+    - POST /embeddings: Receives a text string to convert it into embeddings. 
         ```JSON
         {
             "content": "Chunk PDF"
         }
         ```
+
 ### 4. LLM (Large Language Model)
-- **Descripción**: Servicio basado en un modelo de lenguaje grande (LLM) que recibe consultas desde el servidor y genera respuestas utilizando los chunks proporcionados por el servicio de base de datos. El núcleo del servicio es LLaMA 2.
-- **Tecnología**: Python, llama-cpp-python, Llama2
-- **Funcionalidad**:
-  - Recibe queries y los chunks relevantes.
-  - Construye respuestas basadas en los chunks.
+- **Description**: Service based on a large language model (LLM) that receives queries from the server and generates responses using the chunks provided by the database service. The core of the service is LLaMA 2.
+- **Technology**: Python, llama-cpp-python, Llama2
+- **Functionality**:
+  - Receives queries and the relevant chunks.
+  - Constructs responses based on the chunks.
 - **Endpoints**:
-    - POST /llama: Solicitud al LLM que contiene el prompt del usuario y el máximo de tokens de la respuesta. La estructura es la siguiente:
+    - POST /llama: Request to the LLM that contains the user's prompt and the maximum number of response tokens. The structure is as follows:
         ```JSON
         {
             "system_message": "System Message",
@@ -86,14 +87,17 @@ La arquitectura del proyecto se compone de los siguientes microservicios:
             "max_tokens": "1024"
         }
         ```
-### 5. Servidor
-- **Descripción**: Servicio central que coordina la interacción entre el cliente y los otros microservicios. Recibe las consultas del cliente junto con las fechas y se encarga de solicitar los chunks relevantes a la base de datos y generar una respuesta con la ayuda del LLM.
-- **Tecnología**: SpringBoot
-- **Funcionalidad**:
-  - Coordina la comunicación entre el cliente y los servicios de backend.
-  - Gestiona las solicitudes de consulta y devuelve respuestas al cliente.
+> [!IMPORTANT]  
+> You must download **llama-2-7b-chat.Q2_K.gguf** from [Huggingface](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF). Once downloaded, save it in /LLM folder. 
+
+### 5. Server
+- **Description**: Central service that coordinates the interaction between the client and the other microservices. It receives queries from the client along with the dates and is responsible for requesting the relevant chunks from the database and generating a response with the help of the LLM.
+- **Technology**: SpringBoot
+- **Functionality**:
+  - Coordinates communication between the client and backend services.
+  - Manages query requests and returns responses to the client.
 - **Endpoints**: 
-    - POST /llama: Solicitud que contiene la pregunta del usuario y el rango de fechas proporcionado. La estructura es la siguiente: 
+    - POST /llama: Request that contains the user's question and the provided date range. The structure is as follows: 
         ```JSON
             {
                 "message": "User Message",
@@ -102,45 +106,43 @@ La arquitectura del proyecto se compone de los siguientes microservicios:
             }
         ```
 
-### 6. Cliente
-- **Descripción**: Interfaz de usuario que permite a los usuarios interactuar con el sistema a través de un chat. Los usuarios pueden realizar consultas sobre el BOE.
-- **Tecnologías**: React, NextJS
-- **Funcionalidad**:
-  - Proporciona una interfaz de chat para que los usuarios puedan hacer preguntas.
-  - Envía las consultas y fechas al servidor para obtener respuestas relevantes.
+### 6. Client
+- **Description**: User interface that allows users to interact with the system through a chat. Users can make queries about the BOE.
+- **Technologies**: React, NextJS
+- **Functionality**:
+  - Provides a chat interface for users to ask questions.
+  - Sends the queries and dates to the server to get relevant responses.
 
-## Instalación y Configuración
+## Installation and Configuration
 
-Para desplegar este proyecto, sigue estos pasos:
+To deploy this project, follow these steps:
 
-### Prerrequisitos
+### Prerequisites
 - **Docker**
 
-### Instalación
+### Installation
 
-1. **Clonar el repositorio**:
+1. **Clone the repository**:
     ```bash
-    git clone https://github.com/tuusuario/boe-consulta-automatizada.git
-    cd boe-consulta-automatizada
+    git clone git@github.com:javiermancho/HPE-CDS-LLM.git
     ```
 
-3. **Construir Docker Compose**:
-    - **Construir los contenedores**:
+3. **Build Docker Compose**:
+    - **Build the containers**:
         ```bash
         cd HPE-CDS-LLM
-        docker compose build -no-cache
+        docker compose build --no-cache
         ```
-    - **Correr el Docker Compose**:
+    - **Run Docker Compose**:
         ```bash
         docker compose up
         ```
 
+## Usage
 
-## Uso
-
-1. **Iniciar los microservicios**: Asegúrate de que todos los microservicios estén en funcionamiento.
-2. **Acceder al cliente**: Abre el navegador y navega a `http://localhost:3000`.
-3. **Consultar el BOE**: Usa la interfaz de chat para realizar consultas sobre el BOE. El sistema procesará la consulta y devolverá los resultados más relevantes. Incluye las siguientes funcionalidades:
-    - Actualizar la base de datos con los últimos BOEs.
-    - Configurar el rango de fechas de la consulta.
+1. **Start the microservices**: Ensure all microservices are running.
+2. **Access the client**: Open the browser and navigate to `http://localhost:3000`.
+3. **Query the BOE**: Use the chat interface to make queries about the BOE. The system will process the query and return the most relevant results. It includes the following features:
+    - Update the database with the latest BOEs.
+    - Set the date range for the query.
 ![Chat with guidelines](chat-with-guidelines.png)

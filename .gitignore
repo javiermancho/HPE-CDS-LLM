@@ -1,5 +1,6 @@
 # BOE-Script
 /BOE-Script/.myenv/
+/BOE-Script/pdfs/20*
 
 # LLM
 /LLM/llama-2-7b-chat.Q4_K_M.gguf
@@ -8,7 +9,6 @@
 
 # DATABASE
 /database/.myenv/
-/database/files/
 
 # EMBEDDINGS
 /embeddings/.myenv/

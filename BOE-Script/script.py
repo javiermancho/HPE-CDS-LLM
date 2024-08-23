@@ -97,7 +97,7 @@ def update_pdf():
         fetch_and_save_pdfs(LAST_DATE.strftime("%Y%m%d"))
         LAST_DATE += timedelta(days=1)
     
-    with open('config.json', 'w') as json_file:
+    with open('/pdfs/config.json', 'w') as json_file:
         data = {
             "last_pdf_date": LAST_DATE.strftime("%Y%m%d")  # Save as string in the correct format
         }

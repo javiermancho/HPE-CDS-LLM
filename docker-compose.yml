@@ -17,7 +17,7 @@ services:
       context: ./Database
       dockerfile: Dockerfile
     ports:
-      - "5000:5000"
+      - "5005:5000"
     volumes:
       - ./Database/files:/app/files
     networks:

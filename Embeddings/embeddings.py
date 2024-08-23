@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify
-from langchain_community.embeddings import GPT4AllEmbeddings
-
-
+from langchain_community.embeddings.spacy_embeddings import SpacyEmbeddings
 app = Flask("Embeddings server")
 
-gpt4all_embd = GPT4AllEmbeddings()
+embedder = SpacyEmbeddings(model_name="en_core_web_sm")
+
 
 @app.route("/embeddings", methods=['POST'])
 def get_embedding():
@@ -12,7 +11,7 @@ def get_embedding():
     if not text:
         return ValueError("The 'text' parameter is required"), 400
 
-    query_result = gpt4all_embd.embed_query(text)
+    query_result = embedder.embed_query(text)
     
     return jsonify({"embeddings": query_result})
 

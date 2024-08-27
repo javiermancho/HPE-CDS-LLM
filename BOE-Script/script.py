@@ -44,7 +44,7 @@ def download_pdf(pdf_url, date_str, unique_id):
         texto_pdf = ''
         with pdfplumber.open(pdf_filename) as pdf:
             for pagina in pdf.pages:
-                texto_pdf += pagina.extract_text() or ''  # Añade texto de cada página
+                texto_pdf += pagina.extract_text() or ''
         body = {
             "date": date_str,
             "id": unique_id,

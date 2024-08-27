@@ -39,7 +39,7 @@ public class Utils {
         }
 
         
-        return "{ \"system_message\": \"Eres un asistente legal encargado de sintetizar el contenido del boletin oficial del estado de España. Asegurate que tus respuestas son concisas y claras. No respondas con datos que no estén en el contexto que recibas del usuario.\", \"user_message\": \"" + prompt + "\", \"max_tokens\": 4096 }";
+        return "{ \"system_message\": \"Responde en Español. Eres un asistente legal encargado de sintetizar el contenido del boletin oficial del estado de España. Asegurate que tus respuestas son concisas y claras. No respondas con datos que no estén en el contexto que recibas del usuario.\", \"user_message\": \"" + prompt + "\", \"max_tokens\": 2048 }";
     }
     public static String queryBuilder(String text, String dateInit, String dateEnd){
         return "{ \"query\": \"" + text + "\", \"dateInit\": \"" + dateInit + "\", \"dateEnd\": \"" + dateEnd + "\" }";

@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y build-essential
 
 # Instalar las dependencias necesarias
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python -m spacy download en_core_web_sm
+#RUN python -m spacy download en_core_web_sm
 
 # Exponer el puerto 5001 para que Flask pueda ser accesible desde fuera del contenedor
 EXPOSE 5001

@@ -1,5 +1,6 @@
 Flask
 requests
 chromadb
-spacy
+#spacy
 langchain-text-splitters
+# sentence_transformers

@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y build-essential
 
 # Instala las dependencias necesarias
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --upgrade --quiet  spacy
+#RUN pip install --upgrade --quiet  spacy
 # Instala el modelo de spaCy
-RUN python -m spacy download en_core_web_sm
+#RUN python -m spacy download en_core_web_sm
 
 # Copia el código fuente de la aplicación al directorio de trabajo
 COPY . .

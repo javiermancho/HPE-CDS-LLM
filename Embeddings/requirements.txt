@@ -1,3 +1,6 @@
 flask
 langchain-community
-spacy
+#spacy
+transformers
+torch
+sentence_transformers>=2.2.0

@@ -61,6 +61,15 @@ services:
     networks:
     - my-network
 
+  # reranking:
+  #   build:
+  #     context: ./Reranking
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5006:5006"
+  #   networks:
+  #   - my-network
+
 volumes:
   chromadb_files:
     driver: local

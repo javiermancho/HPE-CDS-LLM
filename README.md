@@ -59,7 +59,7 @@ The project architecture consists of the following microservices:
 
 ### 3. Embeddings
 - **Description**: Service responsible for receiving text chunks and returning their corresponding embeddings. Embeddings are numerical vectors that represent the semantic content of the text.
-- **Technology**: Python, GPT4All
+- **Technology**: Python, Jina Embeddings
 - **Functionality**:
   - Receives text chunks.
   - Generates embeddings corresponding to each chunk.
